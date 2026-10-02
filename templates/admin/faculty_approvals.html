@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Approvals{% endblock %}
+
+{% block content %}
+<div class="approvals-container">
+    <div class="page-header">
+        <h1><i class="fas fa-check-circle"></i> Faculty Approvals</h1>
+        <p>Review and approve pending faculty registrations</p>
+    </div>
+
+    {% if not faculty %}
+    <div class="empty-state">
+        <i class="fas fa-check-double"></i>
+        <h2>No Pending Approvals</h2>
+        <p>All faculty members have been approved!</p>
+    </div>
+    {% else %}
+    <div class="faculty-list">
+        {% for f in faculty %}
+        <div class="faculty-card">
+            <div class="faculty-header">
+                <div class="faculty-info">
+                    <h3>{{ f.full_name }}</h3>
+                    <p class="faculty-email"><i class="fas fa-envelope"></i> {{ f.email }}</p>
+                    <p class="faculty-username"><i class="fas fa-user"></i> @{{ f.username }}</p>
+                </div>
+                <div class="faculty-status">
+                    <span class="badge pending"><i class="fas fa-hourglass-half"></i> Pending</span>
+                </div>
+            </div>
+            
+            <div class="faculty-actions">
+                <button class="btn btn-approve" onclick="approveFaculty({{ f.id }})">
+                    <i class="fas fa-check"></i> Approve
+                </button>
+                <button class="btn btn-reject" onclick="rejectFaculty({{ f.id }})">
+                    <i class="fas fa-times"></i> Reject
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+async function approveFaculty(facultyId) {
+    if (confirm('Are you sure you want to approve this faculty member?')) {
+        try {
+            const response = await fetch(`/admin/approve-faculty/${facultyId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                alert('Faculty approved successfully!');
+                location.reload();
+            } else {
+                alert('Error approving faculty');
+            }
+        } catch (error) {
+            alert('An error occurred');
+        }
+    }
+}
+
+async function rejectFaculty(facultyId) {
+    if (confirm('Are you sure you want to reject this faculty member?')) {
+        try {
+            const response = await fetch(`/admin/reject-faculty/${facultyId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                alert('Faculty rejected!');
+                location.reload();
+            } else {
+                alert('Error rejecting faculty');
+            }
+        } catch (error) {
+            alert('An error occurred');
+        }
+    }
+}
+</script>
+
+<style>
+    .approvals-container {
+        padding: 30px;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        color: #333;
+        margin: 0 0 10px 0;
+        font-size: 32px;
+    }
+
+    .page-header p {
+        color: #999;
+        margin: 0;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .empty-state i {
+        font-size: 60px;
+        color: #4caf50;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h2 {
+        color: #333;
+        margin: 20px 0;
+    }
+
+    .empty-state p {
+        color: #999;
+    }
+
+    .faculty-list {
+        display: grid;
+        gap: 20px;
+    }
+
+    .faculty-card {
+        background: white;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .faculty-card:hover {
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+    }
+
+    .faculty-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .faculty-info h3 {
+        color: #333;
+        margin: 0 0 10px 0;
+        font-size: 18px;
+    }
+
+    .faculty-email,
+    .faculty-username {
+        color: #666;
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    .faculty-status {
+        display: flex;
+        gap: 10px;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .badge.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .faculty-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-approve {
+        background: #4caf50;
+        color: white;
+    }
+
+    .btn-approve:hover {
+        background: #45a049;
+    }
+
+    .btn-reject {
+        background: #f44336;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background: #da190b;
+    }
+</style>
+{% endblock %}
