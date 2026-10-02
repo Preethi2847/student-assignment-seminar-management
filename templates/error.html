@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-card">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h1>Oops! Something went wrong</h1>
+        <p class="error-message">{{ error }}</p>
+        <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
+    </div>
+</div>
+
+<style>
+    .error-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .error-card {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        max-width: 500px;
+    }
+
+    .error-card i {
+        font-size: 60px;
+        color: #f5576c;
+        margin-bottom: 20px;
+    }
+
+    .error-card h1 {
+        color: #333;
+        margin: 20px 0;
+    }
+
+    .error-message {
+        color: #666;
+        font-size: 16px;
+        margin: 20px 0;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 30px;
+        margin-top: 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        background: #f5576c;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: #f50d48;
+    }
+</style>
+{% endblock %}
