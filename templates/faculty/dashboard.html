@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Faculty Dashboard</h1>
+        <p>Welcome, {{ current_user.full_name }}</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Assignments</div>
+        <div class="value">{{ assignment_count }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Seminars</div>
+        <div class="value">{{ seminar_count }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Pending Students</div>
+        <div class="value">{{ pending_count }}</div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <a class="btn btn-primary" href="{{ url_for('faculty_assignments') }}">Manage Assignments</a>
+      <a class="btn btn-primary" href="{{ url_for('faculty_seminars') }}">Manage Seminars</a>
+      <a class="btn btn-primary" href="{{ url_for('faculty_student_approvals') }}">Pending Students</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

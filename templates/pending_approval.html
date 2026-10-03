@@ -3,111 +3,31 @@
 {% block title %}Pending Approval{% endblock %}
 
 {% block content %}
-<div class="pending-container">
-    <div class="pending-card">
-        <i class="fas fa-hourglass-half"></i>
-        <h1>Awaiting Approval</h1>
-        <p>Your account is pending approval from the administrator.</p>
-        <p class="user-info">
-            <strong>Name:</strong> {{ user.full_name }}<br>
-            <strong>Role:</strong> {% if user.role == 'faculty' %}Faculty Member{% else %}Student{% endif %}<br>
-            <strong>Email:</strong> {{ user.email }}
-        </p>
-        <div class="pending-info">
-            <h3>What happens next?</h3>
-            {% if user.role == 'faculty' %}
-                <p>The system administrator will review your faculty registration and approve or reject your account. Once approved, you'll have full access to create assignments and manage students.</p>
-            {% else %}
-                <p>You need to find a faculty member and request approval. Faculty members can approve your account to give you access to assignments and seminars.</p>
-                <a href="{{ url_for('find_faculty') }}" class="btn btn-primary">Find Faculty</a>
-            {% endif %}
-        </div>
-        <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+<div class="dashboard-page">
+  <div class="container">
+    <div class="detail-card" style="max-width: 720px; margin: 60px auto; text-align: center;">
+      <div class="logo-mark" style="margin: 0 auto 16px;">⏳</div>
+      <h1>Awaiting Approval</h1>
+      <p class="muted" style="margin-bottom: 18px;">
+        Hello {{ user.full_name }}, your {{ user.role }} account is currently pending review.
+      </p>
+
+      <div class="table-wrap" style="margin-top: 18px;">
+        <table>
+          <tr><th>Name</th><td>{{ user.full_name }}</td></tr>
+          <tr><th>Role</th><td>{{ user.role|capitalize }}</td></tr>
+          <tr><th>Email</th><td>{{ user.email }}</td></tr>
+          <tr><th>Status</th><td><span class="badge pending">Pending</span></td></tr>
+        </table>
+      </div>
+
+      <div class="action-row" style="justify-content: center; margin-top: 24px;">
+        {% if user.role == 'student' %}
+        <a class="btn btn-primary" href="{{ url_for('find_faculty') }}">Find Faculty</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="{{ url_for('logout') }}">Logout</a>
+      </div>
     </div>
+  </div>
 </div>
-
-<style>
-    .pending-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    .pending-card {
-        background: white;
-        padding: 40px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        max-width: 500px;
-    }
-
-    .pending-card i {
-        font-size: 60px;
-        color: #667eea;
-        margin-bottom: 20px;
-    }
-
-    .pending-card h1 {
-        color: #333;
-        margin: 20px 0;
-    }
-
-    .user-info {
-        background: #f5f5f5;
-        padding: 15px;
-        border-radius: 5px;
-        text-align: left;
-        margin: 20px 0;
-        font-size: 14px;
-    }
-
-    .pending-info {
-        text-align: left;
-        background: #f0f7ff;
-        padding: 20px;
-        border-radius: 5px;
-        margin: 20px 0;
-    }
-
-    .pending-info h3 {
-        color: #667eea;
-        margin-top: 0;
-    }
-
-    .pending-info p {
-        color: #555;
-        line-height: 1.6;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        margin-top: 10px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background: #667eea;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #5568d3;
-    }
-
-    .btn-secondary {
-        background: #999;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background: #777;
-    }
-</style>
 {% endblock %}

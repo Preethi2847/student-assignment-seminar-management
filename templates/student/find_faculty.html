@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Find Faculty{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Find Faculty</h1>
+        <p>Request approval from approved faculty members</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    {% if faculty %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in faculty %}
+          <tr>
+            <td>{{ member.full_name }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.department or 'N/A' }}</td>
+            <td><button class="btn btn-primary" onclick="applyFaculty({{ member.id }})">Apply</button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-box">No faculty available for approval requests.</div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+async function applyFaculty(id) {
+  const response = await fetch(`/student/apply-to-faculty/${id}`, { method: 'POST' });
+  const data = await response.json();
+  if (response.ok) {
+    alert(data.message);
+    location.reload();
+  } else {
+    alert(data.error || 'Request failed');
+  }
+}
+</script>
+{% endblock %}

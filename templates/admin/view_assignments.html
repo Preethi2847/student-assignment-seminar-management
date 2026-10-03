@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Assignments</h1>
+        <p>Overview of all assignment records</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    {% if assignments %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Due Date</th>
+            <th>Faculty</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in assignments %}
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.subject }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.year }}</td>
+            <td>{{ item.due_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ item.faculty.full_name if item.faculty else 'N/A' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-box">No assignments have been created yet.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

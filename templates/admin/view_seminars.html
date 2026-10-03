@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Seminars{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Seminars</h1>
+        <p>Overview of all seminar records</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    {% if seminars %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Date</th>
+            <th>Venue</th>
+            <th>Faculty</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in seminars %}
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.subject }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.year }}</td>
+            <td>{{ item.date.strftime('%Y-%m-%d') }}{% if item.time %} at {{ item.time }}{% endif %}</td>
+            <td>{{ item.location }}</td>
+            <td>{{ item.faculty_assigned.full_name if item.faculty_assigned else 'N/A' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-box">No seminars have been created yet.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

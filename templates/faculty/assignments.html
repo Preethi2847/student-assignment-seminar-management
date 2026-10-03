@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Assignments</h1>
+        <p>Create and manage assignments</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('faculty_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    <div class="detail-card" style="margin-bottom: 24px;">
+      <h3>Create Assignment</h3>
+      <form id="assignment-form">
+        <div class="form-grid">
+          <div class="field">
+            <label>Title</label>
+            <input id="assignment-title" type="text" required>
+          </div>
+          <div class="field">
+            <label>Subject</label>
+            <input id="assignment-subject" type="text" value="General">
+          </div>
+          <div class="field">
+            <label>Department</label>
+            <input id="assignment-department" type="text" value="General">
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <select id="assignment-year">
+              <option value="All">All</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Due Date</label>
+            <input id="assignment-date" type="date" required>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="assignment-description" rows="4" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Save Assignment</button>
+        </div>
+      </form>
+      <div id="assignment-message" class="alert"></div>
+    </div>
+
+    {% if assignments %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Due Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in assignments %}
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.subject }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.year }}</td>
+            <td>{{ item.due_date.strftime('%Y-%m-%d') }}</td>
+            <td>
+              <a class="btn btn-primary" href="{{ url_for('view_assignment_submissions', assignment_id=item.id) }}">View</a>
+              <button class="btn btn-danger" onclick="deleteAssignment({{ item.id }})">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-box">No assignments yet.</div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('assignment-form');
+if (form) {
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const payload = {
+      title: document.getElementById('assignment-title').value,
+      subject: document.getElementById('assignment-subject').value,
+      description: document.getElementById('assignment-description').value,
+      department: document.getElementById('assignment-department').value,
+      year: document.getElementById('assignment-year').value,
+      due_date: document.getElementById('assignment-date').value
+    };
+
+    const response = await fetch('{{ url_for("faculty_assignments") }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    const msg = document.getElementById('assignment-message');
+    if (response.ok) {
+      msg.className = 'alert show success';
+      msg.textContent = data.message;
+      form.reset();
+      location.reload();
+    } else {
+      msg.className = 'alert show error';
+      msg.textContent = data.error || 'Failed';
+    }
+  });
+}
+
+async function deleteAssignment(id) {
+  const response = await fetch(`/faculty/delete-assignment/${id}`, { method: 'POST' });
+  const data = await response.json();
+  if (response.ok) {
+    alert(data.message);
+    location.reload();
+  } else {
+    alert(data.error || 'Delete failed');
+  }
+}
+</script>
+{% endblock %}

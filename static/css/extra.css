@@ -1,0 +1,9 @@
+<style>
+  .nav-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+  }
+</style>

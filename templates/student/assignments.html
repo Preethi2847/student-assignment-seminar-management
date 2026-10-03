@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Assignments</h1>
+        <p>View assignments from approved faculty</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    {% if assignments %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Due Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in assignments %}
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.subject }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.year }}</td>
+            <td>{{ item.due_date.strftime('%Y-%m-%d') }}</td>
+            <td><a class="btn btn-primary" href="{{ url_for('view_assignment', assignment_id=item.id) }}">View</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-box">No assignments available for your current approvals.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

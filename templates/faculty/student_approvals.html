@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Student Approvals{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Pending Student Requests</h1>
+        <p>Approve or reject student requests</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('faculty_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    <div class="table-wrap">
+      {% if pending %}
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in pending %}
+          <tr>
+            <td>{{ row.student.full_name }}</td>
+            <td>{{ row.student.email }}</td>
+            <td>{{ row.student.department or 'N/A' }}</td>
+            <td>{{ row.student.year_of_study or 'N/A' }}</td>
+            <td>
+              <button class="btn btn-success" onclick="approveStudent({{ row.id }})">Approve</button>
+              <button class="btn btn-danger" onclick="rejectStudent({{ row.id }})">Reject</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-box">No pending student requests.</div>
+      {% endif %}
+    </div>
+
+    <div class="page-top" style="margin-top: 30px;">
+      <div>
+        <h2>Approved</h2>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      {% if approved %}
+      <table>
+        <thead><tr><th>Student</th><th>Email</th><th>Department</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for row in approved %}
+          <tr>
+            <td>{{ row.student.full_name }}</td>
+            <td>{{ row.student.email }}</td>
+            <td>{{ row.student.department or 'N/A' }}</td>
+            <td><span class="badge approved">Approved</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-box">No approved students yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+async function approveStudent(id) {
+  const response = await fetch(`/faculty/approve-student/${id}`, { method: 'POST' });
+  const data = await response.json();
+  if (response.ok) {
+    alert(data.message);
+    location.reload();
+  } else {
+    alert(data.error || 'Approval failed');
+  }
+}
+
+async function rejectStudent(id) {
+  const response = await fetch(`/faculty/reject-student/${id}`, { method: 'POST' });
+  const data = await response.json();
+  if (response.ok) {
+    alert(data.message);
+    location.reload();
+  } else {
+    alert(data.error || 'Rejection failed');
+  }
+}
+</script>
+{% endblock %}

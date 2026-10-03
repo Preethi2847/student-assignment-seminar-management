@@ -1,593 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment & Seminar Management System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #111827;
-            line-height: 1.6;
-        }
-
-        .navbar {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            transition: 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: white;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-login {
-            padding: 0.7rem 1.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-login:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-register {
-            padding: 0.7rem 1.5rem;
-            background: white;
-            color: #4f46e5;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 6rem 2rem;
-            text-align: center;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-content {
-            max-width: 800px;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            padding: 1rem 2.5rem;
-            background: white;
-            color: #667eea;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary {
-            padding: 1rem 2.5rem;
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #667eea;
-        }
-
-        .features {
-            padding: 4rem 2rem;
-            background: white;
-        }
-
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .features-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .features-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: #f8fafc;
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid #e5e7eb;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            margin: 0 auto 1.5rem;
-        }
-
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            color: #111827;
-        }
-
-        .feature-card p {
-            color: #6b7280;
-        }
-
-        .how-it-works {
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #f0f7ff 0%, #fef3c7 100%);
-        }
-
-        .works-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .works-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .works-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .step-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            border: 2px solid #e5e7eb;
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0 auto 1rem;
-        }
-
-        .step-card h3 {
-            margin-bottom: 1rem;
-        }
-
-        .step-card p {
-            color: #6b7280;
-        }
-
-        .roles-section {
-            padding: 4rem 2rem;
-            background: white;
-        }
-
-        .roles-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .roles-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .roles-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .roles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .role-card {
-            background: linear-gradient(135deg, #f8fafc, #f5f3ff);
-            padding: 2rem;
-            border-radius: 16px;
-            border: 2px solid #e5e7eb;
-            transition: all 0.3s ease;
-        }
-
-        .role-card:hover {
-            border-color: #4f46e5;
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.15);
-        }
-
-        .role-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .admin-icon { color: #ef4444; }
-        .faculty-icon { color: #f59e0b; }
-        .student-icon { color: #10b981; }
-
-        .role-card h3 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .role-features {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .role-features li {
-            padding: 0.5rem 0;
-            color: #374151;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .role-features li:before {
-            content: "✓";
-            color: #10b981;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .footer {
-            background: #111827;
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Assignment & Seminar Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="logo">
-                <i class="fas fa-book-open"></i>
-                <span>Assignment Hub</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How it Works</a></li>
-                <li><a href="#roles">User Roles</a></li>
-                <li class="auth-buttons">
-                    <a href="{{ url_for('login') }}" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    <a href="{{ url_for('register') }}" class="btn-register"><i class="fas fa-user-plus"></i> Register</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="logo">
+        <span class="logo-mark">🏫</span>
+        <span>College Management</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="{{ url_for('login', role='student') }}">Student Login</a>
+        <a href="{{ url_for('register') }}">Student Signup</a>
+        <a href="{{ url_for('login', role='faculty') }}">Faculty Login</a>
+        <a href="{{ url_for('register') }}">Faculty Signup</a>
+        <a href="{{ url_for('login', role='admin') }}">Admin Login</a>
+      </nav>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
+  <main class="page-shell">
     <section class="hero">
-        <div class="hero-content">
-            <h1>Student Assignment & Seminar Management</h1>
-            <p>A comprehensive platform for managing assignments, seminars, and academic progress</p>
-            <div class="hero-buttons">
-                <a href="{{ url_for('login') }}" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a href="{{ url_for('register') }}" class="btn-secondary"><i class="fas fa-user-plus"></i> Get Started</a>
-            </div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="panel-badge">Academic Management System</div>
+          <h1>Student Assignment and Seminar Monitoring System</h1>
+          <p>
+            A clean, simple platform for managing student assignments, seminar scheduling,
+            faculty approvals, and academic tracking across departments.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="{{ url_for('register') }}">Create Account</a>
+            <a class="btn btn-secondary" href="{{ url_for('login', role='student') }}">Student Login</a>
+          </div>
         </div>
+
+        <div class="hero-panel">
+          <h3>Quick Access</h3>
+          <div class="login-grid">
+            <div class="role-card">
+              <div>
+                <strong>Student</strong>
+                <span>View assignments, seminars</span>
+              </div>
+              <a class="btn btn-primary" href="{{ url_for('login', role='student') }}">Open</a>
+            </div>
+            <div class="role-card">
+              <div>
+                <strong>Faculty</strong>
+                <span>Create assignments and manage students</span>
+              </div>
+              <a class="btn btn-primary" href="{{ url_for('login', role='faculty') }}">Open</a>
+            </div>
+            <div class="role-card">
+              <div>
+                <strong>Admin</strong>
+                <span>Manage faculty, students and records</span>
+              </div>
+              <a class="btn btn-primary" href="{{ url_for('login', role='admin') }}">Open</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="features-container">
-            <div class="features-title">
-                <h2>Powerful Features</h2>
-                <p>Everything you need to manage academic workflows efficiently</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <h3>Assignment Management</h3>
-                    <p>Create, track, and grade assignments with ease. Get instant notifications on submissions.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-presentation"></i>
-                    </div>
-                    <h3>Seminar Scheduling</h3>
-                    <p>Schedule seminars, track attendance, and manage student participation seamlessly.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <h3>Analytics & Reports</h3>
-                    <p>Gain insights with detailed reports, charts, and performance metrics.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                    <h3>Role-Based Access</h3>
-                    <p>Admin, Faculty, and Student roles with specific permissions and workflows.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-file-upload"></i>
-                    </div>
-                    <h3>File Management</h3>
-                    <p>Upload, store, and manage assignment submissions securely in one place.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h3>Smart Notifications</h3>
-                    <p>Get real-time notifications for deadlines, approvals, and important updates.</p>
-                </div>
-            </div>
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-header">
+          <h2>About the System</h2>
+          <p>
+            This system helps educational institutions streamline assignment submission,
+            seminar coordination, faculty approval chains, and reporting in a single platform.
+          </p>
         </div>
+
+        <div class="info-grid">
+          <div class="card">
+            <div class="info-icon">📚</div>
+            <h3>Assignment Tracking</h3>
+            <p>Faculty can create and assign work; students can submit files and review due dates.</p>
+          </div>
+          <div class="card">
+            <div class="info-icon">🎤</div>
+            <h3>Seminar Management</h3>
+            <p>Schedule seminars, assign attendees, and track attendance and grade information.</p>
+          </div>
+          <div class="card">
+            <div class="info-icon">✅</div>
+            <h3>Approval Workflow</h3>
+            <p>Faculty and student records are managed through a structured approval process.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- How it Works Section -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="works-container">
-            <div class="works-title">
-                <h2>How It Works</h2>
-                <p>Simple steps to get started with our platform</p>
-            </div>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>Register</h3>
-                    <p>Create your account as Admin, Faculty, or Student and choose your role</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>Get Approved</h3>
-                    <p>Wait for admin/faculty approval to gain full access to the platform</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Start Using</h3>
-                    <p>Access your dashboard and start managing assignments and seminars</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">4</div>
-                    <h3>Track Progress</h3>
-                    <p>Monitor performance through reports, charts, and analytics</p>
-                </div>
-            </div>
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <h2>Key Features</h2>
+          <p>Built to keep academic operations organized, simple, and professional.</p>
         </div>
+
+        <div class="feature-grid">
+          <div class="card">
+            <div class="feature-icon">👩‍🏫</div>
+            <h3>Faculty Management</h3>
+            <p>Approve faculty registrations, manage resources, and review active department updates.</p>
+          </div>
+          <div class="card">
+            <div class="feature-icon">🎓</div>
+            <h3>Student Management</h3>
+            <p>Review pending student approvals and maintain department-wise records.</p>
+          </div>
+          <div class="card">
+            <div class="feature-icon">📝</div>
+            <h3>Assignment Workflow</h3>
+            <p>Create assignments by subject, department, and academic year with due dates.</p>
+          </div>
+          <div class="card">
+            <div class="feature-icon">📅</div>
+            <h3>Seminar Planning</h3>
+            <p>Arrange seminar details with venue, time, department and assigned audience.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- User Roles Section -->
-    <section class="roles-section" id="roles">
-        <div class="roles-container">
-            <div class="roles-title">
-                <h2>User Roles & Responsibilities</h2>
-                <p>Different access levels for different user types</p>
-            </div>
-            <div class="roles-grid">
-                <div class="role-card">
-                    <div class="role-icon admin-icon"><i class="fas fa-crown"></i></div>
-                    <h3>Admin</h3>
-                    <ul class="role-features">
-                        <li>Approve faculty registrations</li>
-                        <li>View all system users</li>
-                        <li>Monitor overall activity</li>
-                        <li>System configuration</li>
-                    </ul>
-                </div>
-                <div class="role-card">
-                    <div class="role-icon faculty-icon"><i class="fas fa-chalkboard-user"></i></div>
-                    <h3>Faculty</h3>
-                    <ul class="role-features">
-                        <li>Create assignments & seminars</li>
-                        <li>Approve student requests</li>
-                        <li>Grade submissions</li>
-                        <li>Track attendance</li>
-                    </ul>
-                </div>
-                <div class="role-card">
-                    <div class="role-icon student-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <h3>Student</h3>
-                    <ul class="role-features">
-                        <li>Request faculty approval</li>
-                        <li>Submit assignments</li>
-                        <li>Attend seminars</li>
-                        <li>View grades & feedback</li>
-                    </ul>
-                </div>
-            </div>
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2>College Information</h2>
+          <p>Student Assignment & Seminar Monitoring System for a modern academic environment.</p>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#features">Features</a>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#roles">Roles</a>
-                <a href="{{ url_for('login') }}">Login</a>
-                <a href="{{ url_for('register') }}">Register</a>
-            </div>
-            <p>&copy; 2024 Assignment & Seminar Management System. All rights reserved.</p>
+        <div class="info-grid">
+          <div class="card">
+            <div class="info-icon">🏛️</div>
+            <h3>College Name</h3>
+            <p>Green Valley College of Technology</p>
+          </div>
+          <div class="card">
+            <div class="info-icon">📍</div>
+            <h3>Address</h3>
+            <p>Academic Complex, Main Campus, City Center</p>
+          </div>
+          <div class="card">
+            <div class="info-icon">📞</div>
+            <h3>Contact</h3>
+            <p>support@college.edu • +91 98765 43210</p>
+          </div>
         </div>
-    </footer>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2025 Student Assignment & Seminar Management System. All rights reserved.
+    </div>
+  </footer>
 </body>
 </html>

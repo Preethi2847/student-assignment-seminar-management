@@ -1,98 +1,81 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Handle form submissions
-  const forms = document.querySelectorAll('form[data-ajax="true"]');
-  forms.forEach(form => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const button = form.querySelector('button[type="submit"]');
-      const originalText = button.innerHTML;
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('login-form');
+  if (form) {
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const username = document.getElementById('username')?.value?.trim();
+      const password = document.getElementById('password')?.value;
+      const role = document.getElementById('role')?.value || 'student';
+      const messageEl = document.getElementById('form-message');
 
-      button.disabled = true;
-      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+      if (!username || !password) {
+        showMessage(messageEl, 'Please enter both username and password.', 'error');
+        return;
+      }
 
       try {
-        const formData = new FormData(form);
-        const response = await fetch(form.action, {
-          method: form.method || 'POST',
-          body: formData
+        const response = await fetch(form.action || '/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, role })
         });
 
+        const data = await response.json();
         if (response.ok) {
-          if (form.dataset.redirect) {
-            window.location.href = form.dataset.redirect;
-          } else {
-            window.location.reload();
-          }
+          showMessage(messageEl, data.message || 'Login successful', 'success');
+          window.location.href = '/';
         } else {
-          alert('Something went wrong. Please try again.');
+          showMessage(messageEl, data.error || 'Login failed', 'error');
         }
       } catch (error) {
-        alert('Request failed.');
-      } finally {
-        button.disabled = false;
-        button.innerHTML = originalText;
+        showMessage(messageEl, 'Something went wrong. Please try again.', 'error');
       }
     });
-  });
-
-  // Tab switching
-  const tabButtons = document.querySelectorAll('[data-tab-target]');
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const target = button.getAttribute('data-tab-target');
-      document.querySelectorAll('.tab-content').forEach(el => {
-        el.classList.toggle('active', el.id === target);
-      });
-      document.querySelectorAll('[data-tab-target]').forEach(el => {
-        el.classList.toggle('active', el === button);
-      });
-    });
-  });
-
-  // Modal handling
-  const modals = document.querySelectorAll('[data-toggle="modal"]');
-  modals.forEach(modal => {
-    modal.addEventListener('click', () => {
-      const target = modal.getAttribute('data-target');
-      const modalElement = document.querySelector(target);
-      if (modalElement) {
-        modalElement.style.display = 'flex';
-      }
-    });
-  });
-
-  // Close modals when clicking outside
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal')) {
-      e.target.style.display = 'none';
-    }
-  });
-
-  // Close alert messages
-  document.querySelectorAll('.alert .close').forEach(btn => {
-    btn.addEventListener('click', function() {
-      this.parentElement.style.display = 'none';
-    });
-  });
-});
-
-// Utility function for API calls
-async function apiCall(endpoint, method = 'GET', data = null) {
-  const options = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  };
-
-  if (data) {
-    options.body = JSON.stringify(data);
   }
 
-  const response = await fetch(endpoint, options);
-  return {
-    ok: response.ok,
-    status: response.status,
-    data: await response.json()
-  };
+  const registerForm = document.getElementById('register-form');
+  if (registerForm) {
+    registerForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const full_name = document.getElementById('full_name')?.value?.trim();
+      const username = document.getElementById('username')?.value?.trim();
+      const email = document.getElementById('email')?.value?.trim();
+      const password = document.getElementById('password')?.value;
+      const role = document.getElementById('role')?.value || 'student';
+      const department = document.getElementById('department')?.value || '';
+      const year_of_study = document.getElementById('year_of_study')?.value || '';
+      const messageEl = document.getElementById('form-message');
+
+      if (!full_name || !username || !email || !password) {
+        showMessage(messageEl, 'Please fill in all required fields.', 'error');
+        return;
+      }
+
+      try {
+        const response = await fetch(registerForm.action || '/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full_name, username, email, password, role, department, year_of_study })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          showMessage(messageEl, data.message || 'Registration successful', 'success');
+          setTimeout(() => {
+            window.location.href = '/login?role=' + encodeURIComponent(role);
+          }, 800);
+        } else {
+          showMessage(messageEl, data.error || 'Registration failed', 'error');
+        }
+      } catch (error) {
+        showMessage(messageEl, 'Something went wrong. Please try again.', 'error');
+      }
+    });
+  }
+});
+
+function showMessage(element, message, type) {
+  if (!element) return;
+  element.textContent = message;
+  element.className = 'alert show ' + type;
 }

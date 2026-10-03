@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Seminars{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="container">
+    <div class="page-top">
+      <div>
+        <h1>Seminars</h1>
+        <p>Create and manage seminars</p>
+      </div>
+      <a class="btn btn-secondary" href="{{ url_for('faculty_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    <div class="detail-card" style="margin-bottom: 24px;">
+      <h3>Create Seminar</h3>
+      <form id="seminar-form">
+        <div class="form-grid">
+          <div class="field">
+            <label>Title</label>
+            <input id="seminar-title" type="text" required>
+          </div>
+          <div class="field">
+            <label>Subject</label>
+            <input id="seminar-subject" type="text" value="General">
+          </div>
+          <div class="field">
+            <label>Department</label>
+            <input id="seminar-department" type="text" value="General">
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <select id="seminar-year">
+              <option value="All">All</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input id="seminar-date" type="date" required>
+          </div>
+          <div class="field">
+            <label>Time</label>
+            <input id="seminar-time" type="time">
+          </div>
+          <div class="field">
+            <label>Venue</label>
+            <input id="seminar-location" type="text" value="Main Hall">
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="seminar-description" rows="4" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Save Seminar</button>
+        </div>
+      </form>
+      <div id="seminar-message" class="alert"></div>
+    </div>
+
+    {% if seminars %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Date</th>
+            <th>Venue</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in seminars %}
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.subject }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.year }}</td>
+            <td>{{ item.date.strftime('%Y-%m-%d') }}{% if item.time %} {{ item.time }}{% endif %}</td>
+            <td>{{ item.location }}</td>
+            <td>
+              <a class="btn btn-primary" href="{{ url_for('view_seminar_students', seminar_id=item.id) }}">View</a>
+              <button class="btn btn-danger" onclick="deleteSeminar({{ item.id }})">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-box">No seminars yet.</div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+const seminarForm = document.getElementById('seminar-form');
+if (seminarForm) {
+  seminarForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const payload = {
+      title: document.getElementById('seminar-title').value,
+      subject: document.getElementById('seminar-subject').value,
+      description: document.getElementById('seminar-description').value,
+      department: document.getElementById('seminar-department').value,
+      year: document.getElementById('seminar-year').value,
+      date: document.getElementById('seminar-date').value,
+      time: document.getElementById('seminar-time').value,
+      location: document.getElementById('seminar-location').value
+    };
+
+    const response = await fetch('{{ url_for("faculty_seminars") }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    const msg = document.getElementById('seminar-message');
+    if (response.ok) {
+      msg.className = 'alert show success';
+      msg.textContent = data.message;
+      seminarForm.reset();
+      location.reload();
+    } else {
+      msg.className = 'alert show error';
+      msg.textContent = data.error || 'Failed';
+    }
+  });
+}
+
+async function deleteSeminar(id) {
+  const response = await fetch(`/faculty/delete-seminar/${id}`, { method: 'POST' });
+  const data = await response.json();
+  if (response.ok) {
+    alert(data.message);
+    location.reload();
+  } else {
+    alert(data.error || 'Delete failed');
+  }
+}
+</script>
+{% endblock %}
